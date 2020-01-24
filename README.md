@@ -16,7 +16,7 @@ module "windows" {
 #### Full example how to use this module
 ```
 module "windows" {
-  source               = "yusmadi/windows-vm/azurerm"
+  source               = "ayusmadi/windows-vm/azurerm"
   prefix               = "mywindows"
   location             = "southeastasia"
   address_space        = ["10.0.0.0/16"]
