@@ -117,7 +117,7 @@ resource "azurerm_virtual_machine" "main" {
   }
 
   os_profile {
-    computer_name  = "${var.prefix}"
+    computer_name  = "${var.prefix}-vm1"
     admin_username = "${var.prefix}-user"
     admin_password = random_password.password.result
   }
@@ -167,7 +167,7 @@ resource "azurerm_key_vault" "main" {
 resource "azurerm_key_vault_secret" "password" {
   name         = "${var.prefix}-password"
   value        = random_password.password.result
-  key_vault_id = "${azurerm_key_vault.main.id}"
+  key_vault_id = azurerm_key_vault.main.id
 
   tags = {
     label = var.prefix
