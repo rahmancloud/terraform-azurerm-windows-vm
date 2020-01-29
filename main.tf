@@ -17,16 +17,15 @@ resource "random_password" "password" {
   override_special = "!@#$%&"
 }
 
-resource "azurerm_resource_group" "main" {
-  name     = var.prefix
-  location = var.location
+data "azurerm_resource_group" "main" {
+  name = var.resource_group_name
 }
 
 resource "azurerm_virtual_network" "main" {
   name                = "${var.prefix}-vnet1"
   address_space       = var.address_space
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
 
   tags = {
     label = var.prefix
@@ -35,15 +34,15 @@ resource "azurerm_virtual_network" "main" {
 
 resource "azurerm_subnet" "main" {
   name                 = "subnet1"
-  resource_group_name  = azurerm_resource_group.main.name
+  resource_group_name  = data.azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefix       = var.address_prefix
 }
 
 resource "azurerm_public_ip" "main" {
   name                = "${var.prefix}-pip1"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
   allocation_method   = "Dynamic"
   domain_name_label   = var.prefix
 
@@ -54,8 +53,8 @@ resource "azurerm_public_ip" "main" {
 
 resource "azurerm_network_security_group" "main" {
   name                = "${var.prefix}-nsg1"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
 
   tags = {
     label = var.prefix
@@ -72,14 +71,14 @@ resource "azurerm_network_security_rule" "remote_desktop" {
   destination_port_range      = "*"
   source_address_prefix       = "${var.my_public_ip_address}/32"
   destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = data.azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.main.name
 }
 
 resource "azurerm_network_interface" "main" {
   name                      = "${var.prefix}-nic1"
-  location                  = azurerm_resource_group.main.location
-  resource_group_name       = azurerm_resource_group.main.name
+  location                  = data.azurerm_resource_group.main.location
+  resource_group_name       = data.azurerm_resource_group.main.name
   network_security_group_id = azurerm_network_security_group.main.id
 
   ip_configuration {
@@ -96,8 +95,8 @@ resource "azurerm_network_interface" "main" {
 
 resource "azurerm_virtual_machine" "main" {
   name                  = "${var.prefix}-vm1"
-  location              = azurerm_resource_group.main.location
-  resource_group_name   = azurerm_resource_group.main.name
+  location              = data.azurerm_resource_group.main.location
+  resource_group_name   = data.azurerm_resource_group.main.name
   network_interface_ids = [azurerm_network_interface.main.id]
   vm_size               = var.vm_size
 
@@ -118,7 +117,7 @@ resource "azurerm_virtual_machine" "main" {
   }
 
   os_profile {
-    computer_name  = "${var.prefix}"
+    computer_name  = "${var.prefix}-vm1"
     admin_username = "${var.prefix}-user"
     admin_password = random_password.password.result
   }
@@ -142,8 +141,8 @@ resource "azurerm_virtual_machine" "main" {
 
 resource "azurerm_key_vault" "main" {
   name                        = "${var.prefix}-vault"
-  location                    = azurerm_resource_group.main.location
-  resource_group_name         = azurerm_resource_group.main.name
+  location                    = data.azurerm_resource_group.main.location
+  resource_group_name         = data.azurerm_resource_group.main.name
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.main.tenant_id
 
@@ -168,7 +167,7 @@ resource "azurerm_key_vault" "main" {
 resource "azurerm_key_vault_secret" "password" {
   name         = "${var.prefix}-password"
   value        = random_password.password.result
-  key_vault_id = "${azurerm_key_vault.main.id}"
+  key_vault_id = azurerm_key_vault.main.id
 
   tags = {
     label = var.prefix
@@ -178,15 +177,15 @@ resource "azurerm_key_vault_secret" "password" {
 /* auto-shutdown doesn't work at the moment. refer terraform-provider-azurerm issues with service/devtestlabs label
 resource "azurerm_dev_test_lab" "main" {
   name                = "YourDevTestLab"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
 
 }
 
 resource "azurerm_dev_test_schedule" "main" {
   name                = "shutdown-compute-${var.prefix}-vm1"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
   lab_name            = azurerm_dev_test_lab.main.name
   
   status = "Enabled"
@@ -209,7 +208,7 @@ resource "azurerm_dev_test_schedule" "main" {
 
 resource "azurerm_template_deployment" "main" {
   name                = "${var.prefix}-template1"
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = data.azurerm_resource_group.main.name
 
   template_body = <<DEPLOY
 {
@@ -257,7 +256,7 @@ resource "azurerm_template_deployment" "main" {
 DEPLOY
 
   parameters = {
-    "location"             = azurerm_resource_group.main.location
+    "location"             = data.azurerm_resource_group.main.location
     "virtualMachineName"   = azurerm_virtual_machine.main.name
     "autoShutdownStatus"   = var.autoShutdownStatus
     "autoShutdownTime"     = var.autoShutdownTime
