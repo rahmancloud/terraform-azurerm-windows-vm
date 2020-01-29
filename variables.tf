@@ -1,6 +1,5 @@
-variable "location" {
-  description = "The location where the resources should be created."
-  default     = "westus"
+variable "resource_group_name" {
+  description = "Specifies the name of the existing resource group."
 }
 
 variable "prefix" {
