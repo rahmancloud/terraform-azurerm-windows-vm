@@ -13,3 +13,8 @@ output "password" {
   description = "Username to access the Windows virtual machine"
   sensitive   = true
 }
+
+output "vm_id" {
+  value       = azurerm_virtual_machine.main.id
+  description = "The ID of the Virtual Machine."
+}

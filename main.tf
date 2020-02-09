@@ -1,8 +1,8 @@
 terraform {
-  required_version = "~> 0.12.19"
+  required_version = "~> 0.12.20"
 
   required_providers {
-    azurerm = "~> 1.41.0"
+    azurerm = "~> 1.43.0"
   }
 }
 
@@ -21,22 +21,15 @@ data "azurerm_resource_group" "main" {
   name = var.resource_group_name
 }
 
-resource "azurerm_virtual_network" "main" {
-  name                = "${var.prefix}-vnet1"
-  address_space       = var.address_space
-  location            = data.azurerm_resource_group.main.location
+data "azurerm_virtual_network" "main" {
+  name                = var.vnet_name
   resource_group_name = data.azurerm_resource_group.main.name
-
-  tags = {
-    label = var.prefix
-  }
 }
 
-resource "azurerm_subnet" "main" {
-  name                 = "subnet1"
+data "azurerm_subnet" "main" {
+  name                 = var.subnet_name
   resource_group_name  = data.azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.main.name
-  address_prefix       = var.address_prefix
+  virtual_network_name = data.azurerm_virtual_network.main.name
 }
 
 resource "azurerm_public_ip" "main" {
@@ -52,7 +45,7 @@ resource "azurerm_public_ip" "main" {
 }
 
 resource "azurerm_network_security_group" "main" {
-  name                = "${var.prefix}-nsg1"
+  name                = "${var.prefix}-nsg"
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
 
@@ -83,7 +76,7 @@ resource "azurerm_network_interface" "main" {
 
   ip_configuration {
     name                          = "${var.prefix}-config1"
-    subnet_id                     = azurerm_subnet.main.id
+    subnet_id                     = data.azurerm_subnet.main.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.main.id
   }
@@ -94,7 +87,7 @@ resource "azurerm_network_interface" "main" {
 }
 
 resource "azurerm_virtual_machine" "main" {
-  name                  = "${var.prefix}-vm1"
+  name                  = "${var.prefix}-vm"
   location              = data.azurerm_resource_group.main.location
   resource_group_name   = data.azurerm_resource_group.main.name
   network_interface_ids = [azurerm_network_interface.main.id]
@@ -117,7 +110,7 @@ resource "azurerm_virtual_machine" "main" {
   }
 
   os_profile {
-    computer_name  = "${var.prefix}-vm1"
+    computer_name  = "${var.prefix}-vm"
     admin_username = "${var.prefix}-user"
     admin_password = random_password.password.result
   }
@@ -133,41 +126,6 @@ resource "azurerm_virtual_machine" "main" {
     identity_ids = [ data.azurerm_client_config.main.client_id ]
   }
   */
-
-  tags = {
-    label = var.prefix
-  }
-}
-
-resource "azurerm_key_vault" "main" {
-  name                        = "${var.prefix}-vault"
-  location                    = data.azurerm_resource_group.main.location
-  resource_group_name         = data.azurerm_resource_group.main.name
-  enabled_for_disk_encryption = true
-  tenant_id                   = data.azurerm_client_config.main.tenant_id
-
-  sku_name = "standard"
-
-  access_policy {
-    tenant_id = data.azurerm_client_config.main.tenant_id
-    object_id = data.azurerm_client_config.main.object_id
-
-    secret_permissions = [
-      "get",
-      "set",
-      "delete",
-    ]
-  }
-
-  tags = {
-    label = var.prefix
-  }
-}
-
-resource "azurerm_key_vault_secret" "password" {
-  name         = "${var.prefix}-password"
-  value        = random_password.password.result
-  key_vault_id = azurerm_key_vault.main.id
 
   tags = {
     label = var.prefix

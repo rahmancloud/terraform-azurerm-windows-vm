@@ -7,6 +7,14 @@ variable "prefix" {
   default     = "myserver"
 }
 
+variable "vnet_name" {
+  description = "Specifies the name of the existing Virtual Network."
+}
+
+variable "subnet_name" {
+  description = "Specifies the name of the existing Subnet."
+}
+
 variable "address_space" {
   description = "The address space that is used the virtual network. You can supply more than one address space. Changing this forces a new resource to be created."
   default     = ["10.0.0.0/16"]

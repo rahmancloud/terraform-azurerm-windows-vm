@@ -34,7 +34,7 @@ module "windows" {
 
 | Name | Version |
 |------|---------|
-| azurerm | ~> 1.36.0 |
+| azurerm | ~> 1.43.0 |
 | random | n/a |
 
 ## Inputs
@@ -53,7 +53,9 @@ module "windows" {
 | publisher | Specifies the publisher of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"MicrosoftWindowsDesktop"` | no |
 | resource\_group\_name | Specifies the name of the existing resource group. | `any` | n/a | yes |
 | sku | Specifies the SKU of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"19h1-pro"` | no |
+| subnet\_name | Specifies the name of the existing Subnet. | `any` | n/a | yes |
 | vm\_size | Specifies the size of the Virtual Machine. | `string` | `"Standard_DS1_v2"` | no |
+| vnet\_name | Specifies the name of the existing Virtual Network. | `any` | n/a | yes |
 
 ## Outputs
 
@@ -62,6 +64,7 @@ module "windows" {
 | fqdn | Hostname of the Windows virtual machine |
 | password | Username to access the Windows virtual machine |
 | username | Username to access the Windows virtual machine |
+| vm\_id | The ID of the Virtual Machine. |
 
 #### Reference
 
