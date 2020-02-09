@@ -9,7 +9,11 @@ A Terraform module to create a new virtual network and a Windows virtual machine
 #### The simplest example how to use this module
 ```
 module "windows" {
-  source = "yusmadi/windows-vm/azurerm"
+  source              = "yusmadi/windows-vm/azurerm"
+  prefix              = "example"
+  resource_group_name = "existing-rg"
+  vnet_name           = "existing-vnet"
+  subnet_name         = "default"
 }
 ```
 
@@ -19,8 +23,6 @@ module "windows" {
   source               = "ayusmadi/windows-vm/azurerm"
   prefix               = "mywindows"
   resource_group_name  = "southeastasia"
-  address_space        = ["10.0.0.0/16"]
-  address_prefix       = "10.0.2.0/24"
   my_public_ip_address = "13.15.17.19"
   vm_size              = "Standard_DS1_v2"
   publisher            = "MicrosoftWindowsDesktop"
