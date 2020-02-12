@@ -22,8 +22,8 @@ module "windows" {
 module "windows" {
   source               = "ayusmadi/windows-vm/azurerm"
   prefix               = "mywindows"
-  resource_group_name  = "southeastasia"
-  my_public_ip_address = "13.15.17.19"
+  resource_group_name  = "existing-rg"
+  allowed_ip_addresses = ["13.15.17.19/32"]
   vm_size              = "Standard_DS1_v2"
   publisher            = "MicrosoftWindowsDesktop"
   offer                = "Windows-10"
