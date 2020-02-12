@@ -25,9 +25,10 @@ variable "address_prefix" {
   default     = "10.0.2.0/24"
 }
 
-variable "my_public_ip_address" {
+variable "allowed_ip_addresses" {
+  type        = list(string)
   description = "Public IP address to allow remote access"
-  default     = "1.2.3.4"
+  default     = ["1.2.3.4/32"]
 }
 
 variable "vm_size" {

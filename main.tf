@@ -62,7 +62,7 @@ resource "azurerm_network_security_rule" "remote_desktop" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "*"
-  source_address_prefix       = "${var.my_public_ip_address}/32"
+  source_address_prefixes     = [var.allowed_ip_addresses]
   destination_address_prefix  = "*"
   resource_group_name         = data.azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.main.name
