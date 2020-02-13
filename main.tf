@@ -37,7 +37,7 @@ resource "azurerm_public_ip" "main" {
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
   allocation_method   = "Dynamic"
-  domain_name_label   = var.prefix
+  domain_name_label   = var.domain_name_label
 
   tags = {
     label = var.prefix
