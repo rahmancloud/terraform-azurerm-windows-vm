@@ -112,7 +112,7 @@ resource "azurerm_virtual_machine" "main" {
 
   os_profile {
     computer_name  = "${var.prefix}-vm"
-    admin_username = "${var.prefix}-user"
+    admin_username = "${var.prefix}-admin"
     admin_password = random_password.password.result
   }
 
