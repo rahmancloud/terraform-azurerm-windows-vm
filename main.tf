@@ -93,7 +93,7 @@ resource "azurerm_virtual_machine" "main" {
   network_interface_ids = [azurerm_network_interface.main.id]
   vm_size               = var.vm_size
 
-  delete_os_disk_on_termination = var.delete_disks_on_termination
+  delete_os_disk_on_termination     = var.delete_disks_on_termination
   delete_data_disks_on_termination  = var.delete_disks_on_termination
 
   storage_os_disk {
