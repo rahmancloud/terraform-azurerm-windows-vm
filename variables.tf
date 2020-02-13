@@ -70,3 +70,8 @@ variable "autoShutdownTimeZone" {
   description = "The time zone ID (e.g. Pacific Standard time)."
   default     = "UTC"
 }
+
+variable "delete_disks_on_termination" {
+  description = "Delete all disks when virtual machine is deleted"
+  default     = false
+}

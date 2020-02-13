@@ -29,6 +29,7 @@ module "windows" {
   offer                = "Windows-10"
   sku                  = "19h1-pro"
   image_version        = "latest"
+  delete_disks_on_termination = true
 }
 ```
 
@@ -44,15 +45,17 @@ module "windows" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
 | address\_prefix | The address prefix to use for the subnet. | `string` | `"10.0.2.0/24"` | no |
-| address\_space | The address space that is used the virtual network. You can supply more than one address space. Changing this forces a new resource to be created. | `list` | <pre>[<br>  "10.0.0.0/16"<br>]<br></pre> | no |
+| address\_space | The address space that is used the virtual network. You can supply more than one address space. Changing this forces a new resource to be created. | `list` | <pre>[<br>  "10.0.0.0/16"<br>]</pre> | no |
+| allowed\_ip\_addresses | Public IP address to allow remote access | `list(string)` | <pre>[<br>  "1.2.3.4/32"<br>]</pre> | no |
 | autoShutdownStatus | The status of the schedule (i.e. Enabled, Disabled). - Enabled or Disabled | `string` | `"Enabled"` | no |
 | autoShutdownTime | The time of day the schedule will occur. | `string` | `"00:00"` | no |
 | autoShutdownTimeZone | The time zone ID (e.g. Pacific Standard time). | `string` | `"UTC"` | no |
+| delete\_disks\_on\_termination | n/a | `bool` | `false` | no |
 | image\_version | Specifies the version of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"latest"` | no |
-| my\_public\_ip\_address | Public IP address to allow remote access | `string` | `"1.2.3.4"` | no |
 | offer | Specifies the offer of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"Windows-10"` | no |
 | prefix | Prefix to be used by resources and attributes. | `string` | `"myserver"` | no |
-| publisher | Specifies the publisher of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"MicrosoftWindowsDesktop"` | no |
+| publisher | Specifies the publisher of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string`
+| `"MicrosoftWindowsDesktop"` | no |
 | resource\_group\_name | Specifies the name of the existing resource group. | `any` | n/a | yes |
 | sku | Specifies the SKU of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"19h1-pro"` | no |
 | subnet\_name | Specifies the name of the existing Subnet. | `any` | n/a | yes |
