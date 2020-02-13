@@ -72,6 +72,6 @@ variable "autoShutdownTimeZone" {
 }
 
 variable "delete_disks_on_termination" {
-  descriptions = "Delete all disks when virtual machine is deleted"
-  default      = false
+  description = "Delete all disks when virtual machine is deleted"
+  default     = false
 }
