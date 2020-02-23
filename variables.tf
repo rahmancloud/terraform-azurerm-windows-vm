@@ -15,16 +15,6 @@ variable "subnet_name" {
   description = "Specifies the name of the existing Subnet."
 }
 
-variable "address_space" {
-  description = "The address space that is used the virtual network. You can supply more than one address space. Changing this forces a new resource to be created."
-  default     = ["10.0.0.0/16"]
-}
-
-variable "address_prefix" {
-  description = "The address prefix to use for the subnet."
-  default     = "10.0.2.0/24"
-}
-
 variable "allowed_ip_addresses" {
   type        = list(string)
   description = "Public IP address to allow remote access"
