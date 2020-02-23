@@ -46,20 +46,16 @@ module "windows" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
-| address\_prefix | The address prefix to use for the subnet. | `string` | `"10.0.2.0/24"` | no |
-| address\_space | The address space that is used the virtual network. You can supply more than one address space. Changing this forces a new resource to be created. | `list` | <pre>[<br>  "10.0.0.0/16"<br>]</pre> | no |
 | allowed\_ip\_addresses | Public IP address to allow remote access | `list(string)` | <pre>[<br>  "1.2.3.4/32"<br>]</pre> | no |
 | autoShutdownStatus | The status of the schedule (i.e. Enabled, Disabled). - Enabled or Disabled | `string` | `"Enabled"` | no |
 | autoShutdownTime | The time of day the schedule will occur. | `string` | `"00:00"` | no |
 | autoShutdownTimeZone | The time zone ID (e.g. Pacific Standard time). | `string` | `"UTC"` | no |
 | delete\_disks\_on\_termination | Delete all disks when virtual machine is deleted | `bool` | `false` | no |
-| domain\_name\_label | Label for the Domain Name. Will be used to make up the FQDN. If a domain name label is specified, an A DNS record is created
-for the public IP in the Microsoft Azure DNS system. | `any` | n/a | yes |
+| domain\_name\_label | Label for the Domain Name. Will be used to make up the FQDN. If a domain name label is specified, an A DNS record is created for the public IP in the Microsoft Azure DNS system. | `any` | n/a | yes |
 | image\_version | Specifies the version of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"latest"` | no |
 | offer | Specifies the offer of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"Windows-10"` | no |
-| prefix | Prefix to be used by resources and attributes. | `string` | `"myserver"` | no |
-| publisher | Specifies the publisher of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string`
-| `"MicrosoftWindowsDesktop"` | no |
+| prefix | Prefix to be used by resources and attributes. Windows computer name cannot be more than 15 characters long, be entirely numeric | `string` | `"myserver"` | no |
+| publisher | Specifies the publisher of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"MicrosoftWindowsDesktop"` | no |
 | resource\_group\_name | Specifies the name of the existing resource group. | `any` | n/a | yes |
 | sku | Specifies the SKU of the image used to create the virtual machine. Changing this forces a new resource to be created. | `string` | `"19h1-pro"` | no |
 | subnet\_name | Specifies the name of the existing Subnet. | `any` | n/a | yes |

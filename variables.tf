@@ -3,7 +3,7 @@ variable "resource_group_name" {
 }
 
 variable "prefix" {
-  description = "Prefix to be used by resources and attributes."
+  description = "Prefix to be used by resources and attributes. Windows computer name cannot be more than 15 characters long, be entirely numeric"
   default     = "myserver"
 }
 
