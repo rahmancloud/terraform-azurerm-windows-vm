@@ -9,7 +9,7 @@ terraform {
 data "azurerm_client_config" "main" {}
 
 resource "random_password" "password" {
-  length           = 8
+  length           = 12
   min_upper        = 1
   min_lower        = 1
   min_special      = 1
